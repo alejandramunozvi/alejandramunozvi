@@ -1,25 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
-function App() {
+// import ScrollAlbum from "./ScrollAlbum/index";
+
+const API_URL =
+  "http://demo.subsonic.org/rest/getAlbumList2?u=guest&p=guest&v=1.12.0&c=myapp&f=json&type=newest";
+
+const App = () => {
+  const [addAlbum, setAddAlbum] = useState([]);
+
+  const getDataFromApi = async () => {
+    const { data } = await axios.get(API_URL);
+    const response = data["subsonic-response"]["albumList2"]["album"];
+    setAddAlbum(response);
+  };
+
+  useEffect(() => getDataFromApi(), []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="wrapper">
+      {/* <ScrollAlbum /> */}
+      {addAlbum.map((album) => (
+        <div>{album.coverArt} </div>
+      ))}
     </div>
   );
-}
+};
 
 export default App;
